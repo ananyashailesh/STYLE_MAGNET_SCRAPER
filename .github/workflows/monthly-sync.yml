@@ -1,0 +1,55 @@
+name: Monthly Product Sync
+
+on:
+  schedule:
+    - cron: '0 6 1 * *'   # 1st of every month at 6:00 AM UTC
+  workflow_dispatch:        # Manual trigger
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: "Scrape products via Apify (captures new dataset ID)"
+        continue-on-error: false
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          APIFY_DATASET_ID: ${{ secrets.APIFY_DATASET_ID }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          node scrape.js
+          # Export the new dataset ID written to .env so the next step can use it
+          echo "APIFY_DATASET_ID=$(grep APIFY_DATASET_ID .env | cut -d '=' -f2)" >> $GITHUB_ENV
+
+      - name: "Run monthly normalize and sync"
+        continue-on-error: false
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          APIFY_DATASET_ID: ${{ env.APIFY_DATASET_ID }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: node index.js
+
+      - name: "Reprocess needs_review"
+        continue-on-error: false
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          APIFY_DATASET_ID: ${{ env.APIFY_DATASET_ID }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: node -e "import('./supabase.js').then(m => m.reprocessNeedsReview())"

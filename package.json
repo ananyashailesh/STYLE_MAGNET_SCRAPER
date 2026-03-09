@@ -1,0 +1,21 @@
+{
+  "name": "scrape-clean-automate",
+  "version": "1.0.0",
+  "description": "Scrape e-commerce product data from Apify, normalize fields, and store in Supabase",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "scrape": "node scrape.js",
+    "pipeline": "node scrape.js && node index.js",
+    "reprocess": "node -e \"import('./supabase.js').then(m => m.reprocessNeedsReview())\""
+  },
+  "dependencies": {
+    "apify-client": "^2.9.0",
+    "@supabase/supabase-js": "^2.39.0",
+    "fuse.js": "^7.0.0",
+    "nearest-color": "^0.4.4",
+    "color-name-list": "^10.0.0",
+    "dotenv": "^16.3.1"
+  }
+}

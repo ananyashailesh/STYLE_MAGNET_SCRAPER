@@ -1,0 +1,335 @@
+table_name,column_name,data_type,is_nullable,column_default
+access_lvl_options,access_id,bigint,NO,null
+access_lvl_options,created_at,timestamp with time zone,NO,now()
+access_lvl_options,accesslvl_name,text,NO,null
+attribute_options,id,bigint,NO,null
+attribute_options,created_at,timestamp with time zone,NO,now()
+attribute_options,attr_name,text,NO,null
+body_areas,id,bigint,NO,null
+body_areas,created_at,timestamp with time zone,NO,now()
+body_areas,name,text,NO,null
+brand_attributes,id,bigint,NO,null
+brand_attributes,created_at,timestamp with time zone,NO,now()
+brand_attributes,brand,bigint,NO,null
+brand_attributes,attribute,bigint,NO,null
+brand_size_cats,id,bigint,NO,null
+brand_size_cats,created_at,timestamp with time zone,NO,now()
+brand_size_cats,brand,bigint,NO,null
+brand_size_cats,size_category,bigint,NO,null
+brands,brand_id,bigint,NO,null
+brands,created_at,timestamp with time zone,NO,now()
+brands,brand_name,text,NO,null
+brands,brand_highlights,text,NO,null
+brands,updated_at,timestamp without time zone,YES,now()
+color_options,color_id,bigint,NO,null
+color_options,created_at,timestamp with time zone,NO,now()
+color_options,color_name,text,NO,null
+employee,created_at,timestamp with time zone,NO,now()
+employee,Fname,text,NO,null
+employee,Lname,text,NO,null
+employee,role,bigint,NO,null
+employee,birthday,date,NO,null
+employee,start_date,date,NO,null
+employee,employee_number,text,NO,null
+employee,employee_id,bigint,NO,null
+height_category_options,id,bigint,NO,null
+height_category_options,created_at,timestamp with time zone,NO,now()
+height_category_options,height_name,text,NO,null
+hip_attributes,id,bigint,NO,null
+hip_attributes,created_at,timestamp with time zone,NO,now()
+hip_attributes,name,text,NO,null
+hip_attributes,img,text,YES,null
+hip_attributes,body_area,bigint,NO,null
+material_options,id,bigint,NO,null
+material_options,created_at,timestamp with time zone,NO,now()
+material_options,name,text,NO,null
+material_options,fit details,text,NO,null
+material_options,quality_details,text,NO,null
+moment_options,moment_id,bigint,NO,null
+moment_options,created_at,timestamp with time zone,NO,now()
+moment_options,moment_name,text,NO,null
+moment_options,img,text,NO,null
+moment_outfits,id,bigint,NO,null
+moment_outfits,created_at,timestamp with time zone,NO,now()
+moment_outfits,outfit,bigint,NO,null
+moment_outfits,moment,bigint,NO,null
+monthly_spend_options,id,bigint,NO,null
+monthly_spend_options,created_at,timestamp with time zone,NO,now()
+monthly_spend_options,spend_range,text,NO,null
+order_status,id,bigint,NO,null
+order_status,created_at,timestamp with time zone,NO,now()
+order_status,status_name,text,NO,null
+ordered_item_status,id,bigint,NO,null
+ordered_item_status,created_at,timestamp with time zone,NO,now()
+ordered_item_status,status_name,text,NO,null
+ordered_items,order_item_id,bigint,NO,null
+ordered_items,created_at,timestamp with time zone,NO,now()
+ordered_items,order_id,bigint,NO,null
+ordered_items,order_number,text,NO,null
+ordered_items,user,uuid,NO,null
+ordered_items,product_id,bigint,NO,null
+ordered_items,quantitiy,integer,NO,null
+ordered_items,size,text,NO,null
+ordered_items,price_at_purchase,numeric,NO,null
+ordered_items,final_price,numeric,NO,null
+ordered_items,tax_amt,numeric,YES,null
+ordered_items,tracking_number,text,YES,null
+ordered_items,updated_at,timestamp without time zone,YES,null
+ordered_items,shopped_status,bigint,YES,null
+ordered_items,substitute_requested?,boolean,NO,null
+ordered_items,substitution_info,bigint,YES,null
+ordered_items,return_request,boolean,YES,null
+ordered_items,return_reason,bigint,YES,null
+ordered_items,final_retailer,bigint,NO,null
+orders,created_at,timestamp with time zone,NO,now()
+orders,user,uuid,NO,null
+orders,subtotal,numeric,NO,null
+orders,accepted_by,uuid,YES,gen_random_uuid()
+orders,updated_at,timestamp without time zone,NO,now()
+orders,auth_amt,numeric,YES,null
+orders,final_amt,numeric,YES,null
+orders,shipping_addr,jsonb,NO,null
+orders,order_number,text,NO,null
+orders,total_tax,numeric,YES,'0'::numeric
+orders,shipping_cost,numeric,YES,'0'::numeric
+orders,order_id,bigint,NO,null
+orders,status,bigint,NO,null
+outfit_requests,id,bigint,NO,null
+outfit_requests,created_at,timestamp with time zone,NO,now()
+outfit_requests,prompt,text,NO,null
+outfit_seasons,id,bigint,NO,null
+outfit_seasons,created_at,timestamp with time zone,NO,now()
+outfit_seasons,outfit,bigint,NO,null
+outfit_seasons,season,bigint,NO,null
+outfit_styles,id,bigint,NO,null
+outfit_styles,created_at,timestamp with time zone,NO,now()
+outfit_styles,outfit,bigint,NO,null
+outfit_styles,style,uuid,NO,null
+outfits,id,bigint,NO,null
+outfits,created_at,timestamp with time zone,NO,now()
+outfits,name,text,NO,null
+outfits,product_1,bigint,NO,null
+outfits,product_2,bigint,NO,null
+outfits,product_3,bigint,NO,null
+outfits,product_4,bigint,NO,null
+outfits,product_5,bigint,NO,null
+outfits,product_6,bigint,YES,null
+outfits,archive,boolean,NO,null
+outfits,featured,boolean,NO,null
+outfits,price,numeric,NO,null
+payments,id,bigint,NO,null
+payments,created_at,timestamp with time zone,NO,now()
+payments,amount,numeric,NO,null
+payments,billing_reason,text,NO,null
+payments,charge_id,text,NO,null
+payments,customer_id,text,NO,null
+payments,invoice_id,text,NO,null
+payments,order_id,bigint,NO,null
+payments,user,bigint,NO,null
+pick-up-requests,id,bigint,NO,null
+pick-up-requests,created_at,timestamp with time zone,NO,now()
+pick-up-requests,pickup_date,date,NO,null
+pick-up-requests,ordered_item,bigint,NO,null
+pick-up-requests,return_reason,text,NO,null
+pick-up-requests,pickup_addy,text,NO,null
+pick-up-requests,pickup_city,text,NO,null
+pick-up-requests,pickup_state,text,NO,null
+pick-up-requests,pickup_zip,numeric,NO,null
+prod_shape_bodymatch,id,bigint,NO,null
+prod_shape_bodymatch,created_at,timestamp with time zone,NO,now()
+prod_shape_bodymatch,shoulder_attr,bigint,YES,null
+prod_shape_bodymatch,waist_attr,bigint,YES,null
+prod_shape_bodymatch,hip_attr,bigint,YES,null
+prod_shape_bodymatch,prod_shape,bigint,NO,null
+prod_shape_bodymatch,shoulder_fit_info,text,YES,null
+prod_shape_bodymatch,waist_fit_info,text,YES,null
+prod_shape_bodymatch,hip_fit_info,text,YES,null
+prod_shape_typematch,id,bigint,NO,null
+prod_shape_typematch,created_at,timestamp with time zone,NO,now()
+prod_shape_typematch,prod_shape,bigint,NO,null
+prod_shape_typematch,prod_type,bigint,NO,null
+prod_type_body_areas,id,bigint,NO,null
+prod_type_body_areas,created_at,timestamp with time zone,NO,now()
+prod_type_body_areas,prod_type,bigint,NO,null
+prod_type_body_areas,body_area,bigint,NO,null
+prod_type_subcats,id,bigint,NO,null
+prod_type_subcats,created_at,timestamp with time zone,NO,now()
+prod_type_subcats,prod_type,bigint,NO,null
+prod_type_subcats,subcategory,bigint,NO,null
+product's_shapes,id,bigint,NO,null
+product's_shapes,created_at,timestamp with time zone,NO,now()
+product's_shapes,product,bigint,NO,null
+product's_shapes,prod_shape,bigint,NO,null
+product_color_vars,id,bigint,NO,null
+product_color_vars,created_at,timestamp with time zone,NO,now()
+product_color_vars,color,bigint,NO,null
+product_color_vars,product,bigint,NO,null
+product_seasons,id,bigint,NO,null
+product_seasons,created_at,timestamp with time zone,NO,now()
+product_seasons,product,bigint,NO,null
+product_seasons,season,bigint,NO,null
+product_shape_options,id,bigint,NO,null
+product_shape_options,created_at,timestamp with time zone,NO,now()
+product_shape_options,name,text,NO,null
+product_size_vars,id,bigint,NO,null
+product_size_vars,created_at,timestamp with time zone,NO,now()
+product_size_vars,product,bigint,NO,null
+product_size_vars,size_option,bigint,NO,null
+product_styles,id,bigint,NO,null
+product_styles,created_at,timestamp with time zone,NO,now()
+product_styles,product,bigint,NO,null
+product_styles,style,uuid,NO,null
+product_type_options,id,bigint,NO,null
+product_type_options,created_at,timestamp with time zone,NO,now()
+product_type_options,prod_type_name,text,NO,null
+products,product_id,bigint,NO,null
+products,created_at,timestamp with time zone,NO,now()
+products,archive,boolean,NO,null
+products,updated_at,timestamp without time zone,YES,now()
+products,product_name,text,NO,null
+products,retailer,bigint,NO,null
+products,product_url,text,YES,null
+products,brand,bigint,NO,null
+products,image,text,NO,null
+products,original_price,numeric,NO,null
+products,sale_price,numeric,YES,null
+products,product_type,bigint,NO,null
+products,product_subtype,bigint,NO,null
+products,size_category,bigint,NO,null
+promo_codes,id,bigint,NO,null
+promo_codes,created_at,timestamp with time zone,NO,now()
+promo_codes,start_date,date,NO,null
+promo_codes,end_date,date,NO,null
+promo_codes,name,text,NO,null
+promo_codes,code,text,NO,null
+promo_codes,discount amount,numeric,NO,null
+promo_codes,discount_option,bigint,NO,null
+promo_discount_options,id,bigint,NO,null
+promo_discount_options,created_at,timestamp with time zone,NO,now()
+promo_discount_options,name,text,NO,null
+retailer_order_info,id,bigint,NO,null
+retailer_order_info,created_at,timestamp with time zone,NO,now()
+retailer_order_info,tax_amt,numeric,NO,null
+retailer_order_info,tracking_url,text,YES,null
+retailer_order_info,tracking_numb,text,YES,null
+retailer_order_info,shipping_amt,numeric,NO,null
+retailer_order_info,retailer,bigint,NO,null
+retailer_order_info,delivery_date,date,YES,null
+retailer_order_info,order_id,bigint,NO,null
+retailers,id,bigint,NO,null
+retailers,created_at,timestamp with time zone,NO,now()
+retailers,name,text,NO,null
+retailers,website,text,NO,null
+retailers,shipping_details,text,NO,null
+retailers,affiliate?,boolean,NO,null
+reviews,id,bigint,NO,null
+reviews,created_at,timestamp with time zone,NO,now()
+reviews,shape_review,bigint,NO,null
+reviews,size_review,bigint,NO,null
+reviews,chosen_size,bigint,NO,null
+reviews,recommended_size,bigint,NO,null
+reviews,ordered_item,bigint,NO,null
+reviews,user,bigint,NO,null
+reviews,comments,text,YES,null
+reviews,image,text,YES,null
+reviews,quality_review,numeric,NO,null
+seasons,season_id,bigint,NO,null
+seasons,created_at,timestamp with time zone,NO,now()
+seasons,updated_at,timestamp without time zone,YES,now()
+seasons,name,text,NO,null
+shape_review_options,id,bigint,NO,null
+shape_review_options,created_at,timestamp with time zone,NO,now()
+shape_review_options,name,text,NO,null
+shopping_list_items,id,bigint,NO,null
+shopping_list_items,created_at,timestamp with time zone,NO,now()
+shopping_list_items,product,bigint,NO,null
+shopping_list_items,user,bigint,NO,null
+shopping_list_items,quantity,numeric,NO,null
+shopping_list_items,size,bigint,YES,null
+shoulder_attributes,id,bigint,NO,null
+shoulder_attributes,created_at,timestamp with time zone,NO,now()
+shoulder_attributes,name,text,NO,null
+shoulder_attributes,img,text,YES,null
+shoulder_attributes,body_area,bigint,NO,'5'::bigint
+sign_up_stage,id,bigint,NO,null
+sign_up_stage,created_at,timestamp with time zone,NO,now()
+sign_up_stage,stage_name,text,NO,null
+size_category_options,id,bigint,NO,null
+size_category_options,created_at,timestamp with time zone,NO,now()
+size_category_options,name,text,NO,null
+size_options,id,bigint,NO,null
+size_options,created_at,timestamp with time zone,NO,now()
+size_options,name,text,NO,null
+size_options,size_categ,bigint,NO,null
+size_options,abbreviated_name,text,NO,null
+size_review_options,id,bigint,NO,null
+size_review_options,created_at,timestamp with time zone,NO,now()
+size_review_options,name,text,NO,null
+sizing-charts,id,bigint,NO,null
+sizing-charts,created_at,timestamp with time zone,NO,now()
+sizing-charts,body_area,bigint,NO,null
+sizing-charts,brand,bigint,NO,null
+sizing-charts,min_meas,numeric,NO,null
+sizing-charts,max_meas,numeric,NO,null
+sizing-charts,size,bigint,NO,null
+style_options,style_id,uuid,NO,gen_random_uuid()
+style_options,created_at,timestamp with time zone,NO,now()
+style_options,style_name,text,NO,null
+substitution_options,id,bigint,NO,null
+substitution_options,created_at,timestamp with time zone,NO,now()
+substitution_options,sub_choice,text,NO,null
+substitutions,id,bigint,NO,null
+substitutions,created_at,timestamp with time zone,NO,now()
+substitutions,original_prod,bigint,NO,null
+substitutions,substituted_prod,bigint,NO,null
+substitutions,size,bigint,NO,null
+substitutions,final_price,numeric,NO,null
+user_access_lvl,id,bigint,NO,null
+user_access_lvl,created_at,timestamp with time zone,NO,now()
+user_access_lvl,access_lvl,bigint,NO,null
+user_access_lvl,user,uuid,NO,null
+user_goal_options,goal_id,bigint,NO,null
+user_goal_options,created_at,timestamp with time zone,NO,now()
+user_goal_options,goal_option,text,NO,null
+user_goals,id,bigint,NO,null
+user_goals,created_at,timestamp with time zone,NO,now()
+user_goals,goal,bigint,NO,null
+user_goals,user,uuid,NO,null
+user_shopping_list,id,bigint,NO,null
+user_shopping_list,created_at,timestamp with time zone,NO,now()
+user_shopping_list,user,bigint,NO,null
+user_shopping_list,subtotal,numeric,NO,null
+user_shopping_list,shopper_fee,numeric,NO,null
+user_shopping_list,est_total,numeric,NO,null
+user_style_prefs,id,bigint,NO,null
+user_style_prefs,created_at,timestamp with time zone,NO,now()
+user_style_prefs,style_type,uuid,NO,null
+user_style_prefs,favorite_count,numeric,NO,null
+user_style_prefs,user,bigint,NO,null
+users,id,bigint,NO,null
+users,created_at,timestamp with time zone,NO,now()
+users,archive,boolean,NO,null
+users,birthday,date,YES,null
+users,bust_meas,numeric,YES,null
+users,waist_meas,numeric,YES,null
+users,hip_meas,numeric,YES,null
+users,shoulder_shape,bigint,NO,null
+users,waist_shape,bigint,NO,null
+users,hip_shape,bigint,NO,null
+users,Fname,text,NO,null
+users,Lname,text,NO,null
+users,foot_meas,numeric,YES,null
+users,height_cat,bigint,YES,null
+users,largestBodyArea,text,YES,null
+users,largestMeasurement,numeric,YES,null
+users,location,text,YES,null
+users,phone_num,text,YES,null
+users,profile_img,text,YES,null
+users,signupStage,bigint,NO,null
+users,userid,uuid,NO,gen_random_uuid()
+users,monthly_spend,bigint,YES,null
+waist_attributes,id,bigint,NO,null
+waist_attributes,created_at,timestamp with time zone,NO,now()
+waist_attributes,name,text,NO,null
+waist_attributes,img,text,YES,null
+waist_attributes,body_area,bigint,NO,'2'::bigint
