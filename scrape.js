@@ -110,19 +110,33 @@ async function main() {
     process.exit(1);
   }
 
-  // Save the dataset ID to .env for the normalize pipeline
-  const envPath = new URL('.env', import.meta.url).pathname;
-  let envContent = fs.readFileSync(envPath, 'utf-8');
-  envContent = envContent.replace(
-    /APIFY_DATASET_ID=.*/,
-    `APIFY_DATASET_ID=${datasetId}`,
-  );
-  fs.writeFileSync(envPath, envContent);
+  // In CI (GitHub Actions), .env doesn't exist — write dataset ID to GITHUB_ENV
+  // so subsequent steps can read it via ${{ env.APIFY_DATASET_ID }}
+  const isCI = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true';
+
+  if (isCI) {
+    // Append to GITHUB_ENV file for next steps to consume
+    const githubEnvFile = process.env.GITHUB_ENV;
+    if (githubEnvFile) {
+      fs.appendFileSync(githubEnvFile, `APIFY_DATASET_ID=${datasetId}\n`);
+    }
+  } else {
+    // Local: update .env file
+    const envPath = new URL('.env', import.meta.url).pathname;
+    if (fs.existsSync(envPath)) {
+      let envContent = fs.readFileSync(envPath, 'utf-8');
+      envContent = envContent.replace(
+        /APIFY_DATASET_ID=.*/,
+        `APIFY_DATASET_ID=${datasetId}`,
+      );
+      fs.writeFileSync(envPath, envContent);
+      console.log(`   Saved to .env as APIFY_DATASET_ID`);
+    }
+  }
 
   console.log('\n' + '='.repeat(60));
   console.log(`✅ SCRAPE COMPLETE`);
   console.log(`   Dataset ID: ${datasetId}`);
-  console.log(`   Saved to .env as APIFY_DATASET_ID`);
   console.log('');
   console.log('   Next step: run "node index.js" to normalize & sync to Supabase');
   console.log('='.repeat(60));
