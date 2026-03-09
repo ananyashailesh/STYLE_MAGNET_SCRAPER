@@ -68,11 +68,27 @@ async function runScrape(urls, label) {
   console.log(`\n🚀 Starting scrape: ${label} (${urls.length} URLs)`);
   console.log('   Calling actor:', ACTOR_ID);
 
-  const run = await client.actor(ACTOR_ID).call(input, {
-    memory: 1024,       // 1 GB — matches your screenshot
-    timeout: 300,       // 300 seconds — matches your screenshot
-    maxItems: undefined,
-  });
+  let run;
+  try {
+    run = await client.actor(ACTOR_ID).call(input, {
+      memory: 1024,
+      timeout: 300,
+    });
+  } catch (err) {
+    // Monthly usage hard limit exceeded — fall back to existing dataset
+    if (err.statusCode === 403 && err.type === 'platform-feature-disabled') {
+      const fallbackId = process.env.APIFY_DATASET_ID;
+      if (fallbackId) {
+        console.warn('\n⚠️  Apify monthly usage limit reached.');
+        console.warn(`   Falling back to existing dataset: ${fallbackId}`);
+        console.warn('   Data from last successful scrape will be used.');
+        return { datasetId: fallbackId, fallback: true };
+      }
+      console.error('\n❌ Apify monthly limit reached and no fallback APIFY_DATASET_ID set.');
+      process.exit(1);
+    }
+    throw err;
+  }
 
   console.log(`   Run ID: ${run.id}`);
   console.log(`   Status: ${run.status}`);
@@ -83,12 +99,8 @@ async function runScrape(urls, label) {
     return null;
   }
 
-  // Fetch results count
-  const dataset = client.dataset(run.defaultDatasetId);
-  const { items } = await dataset.listItems({ limit: 0 });
   console.log(`   ✅ Scrape complete — dataset has items ready`);
-
-  return run.defaultDatasetId;
+  return { datasetId: run.defaultDatasetId, fallback: false };
 }
 
 // ─── MAIN ────────────────────────────────────────────────────────────────────
@@ -103,39 +115,48 @@ async function main() {
   console.log('='.repeat(60));
 
   // Run all URLs in a single actor call
-  const datasetId = await runScrape(START_URLS, 'All Retailers');
+  const result = await runScrape(START_URLS, 'All Retailers');
 
-  if (!datasetId) {
+  if (!result) {
     console.error('\n❌ Scrape failed. No dataset produced.');
     process.exit(1);
   }
+
+  const { datasetId, fallback } = result;
 
   // In CI (GitHub Actions), .env doesn't exist — write dataset ID to GITHUB_ENV
   // so subsequent steps can read it via ${{ env.APIFY_DATASET_ID }}
   const isCI = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true';
 
-  if (isCI) {
-    // Append to GITHUB_ENV file for next steps to consume
+  if (!fallback) {
+    // Only persist the new dataset ID if we actually ran a fresh scrape
+    if (isCI) {
+      const githubEnvFile = process.env.GITHUB_ENV;
+      if (githubEnvFile) {
+        fs.appendFileSync(githubEnvFile, `APIFY_DATASET_ID=${datasetId}\n`);
+      }
+    } else {
+      const envPath = new URL('.env', import.meta.url).pathname;
+      if (fs.existsSync(envPath)) {
+        let envContent = fs.readFileSync(envPath, 'utf-8');
+        envContent = envContent.replace(
+          /APIFY_DATASET_ID=.*/,
+          `APIFY_DATASET_ID=${datasetId}`,
+        );
+        fs.writeFileSync(envPath, envContent);
+        console.log(`   Saved to .env as APIFY_DATASET_ID`);
+      }
+    }
+  } else if (isCI) {
+    // Fallback: pass through the existing dataset ID to next steps
     const githubEnvFile = process.env.GITHUB_ENV;
     if (githubEnvFile) {
       fs.appendFileSync(githubEnvFile, `APIFY_DATASET_ID=${datasetId}\n`);
     }
-  } else {
-    // Local: update .env file
-    const envPath = new URL('.env', import.meta.url).pathname;
-    if (fs.existsSync(envPath)) {
-      let envContent = fs.readFileSync(envPath, 'utf-8');
-      envContent = envContent.replace(
-        /APIFY_DATASET_ID=.*/,
-        `APIFY_DATASET_ID=${datasetId}`,
-      );
-      fs.writeFileSync(envPath, envContent);
-      console.log(`   Saved to .env as APIFY_DATASET_ID`);
-    }
   }
 
   console.log('\n' + '='.repeat(60));
-  console.log(`✅ SCRAPE COMPLETE`);
+  console.log(fallback ? '⚠️  USING FALLBACK DATASET (monthly limit reached)' : '✅ SCRAPE COMPLETE');
   console.log(`   Dataset ID: ${datasetId}`);
   console.log('');
   console.log('   Next step: run "node index.js" to normalize & sync to Supabase');
