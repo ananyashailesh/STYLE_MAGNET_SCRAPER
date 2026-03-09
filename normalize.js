@@ -1,6 +1,8 @@
 import Fuse from 'fuse.js';
 import nearestColor from 'nearest-color';
-import colorNameList from 'color-name-list';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const colorNameList = require('color-name-list');
 
 // ─── VALID VALUES ────────────────────────────────────────────────────────────
 
